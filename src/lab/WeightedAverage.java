@@ -1,27 +1,20 @@
 package lab;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class WeightedAverage
 {
     public static void main(String[] args)
     {
-        double result;
-        Map<Double, Double> inputNumbers;
+        Map<Double, Double> dataSet;
 
-        inputNumbers = getInputNumbersWithWeights();
+        dataSet = getInputNumbersWithWeights();
 
-        for (Map.Entry<Double, Double> entry : inputNumbers.entrySet())
+        if(dataSet.size() > 0)
         {
-            System.out.println(entry.getKey() + " " + entry.getValue());
-        }
+            printInputNumbersAndWeights(dataSet);
 
-        if(inputNumbers.size() > 0)
-        {
-            result = getWeightedAverageFrom(inputNumbers);
-
-            System.out.println("Weighted average: " + result);
+            System.out.println("\nWeighted average: " + getWeightedAverageFrom(dataSet));
         }
     }
 
@@ -30,7 +23,7 @@ public class WeightedAverage
         double number;
         double weight;
         String userAnswer;
-        Map<Double, Double> inputNumbers = new HashMap<>();
+        Map<Double, Double> dataSet = new HashMap<>();
         Scanner scanner = new Scanner(System.in);
 
         while(true)
@@ -40,9 +33,9 @@ public class WeightedAverage
             try
             {
                 number = Double.parseDouble(scanner.nextLine());
-                weight = getRandomWeightFromRange(1, 10);
+                weight = new Random().nextDouble();
 
-                inputNumbers.put(number, weight);
+                dataSet.put(number, weight);
             }
             catch(NumberFormatException $e)
             {
@@ -59,7 +52,17 @@ public class WeightedAverage
             }
         }
 
-        return inputNumbers;
+        return dataSet;
+    }
+
+    private static void printInputNumbersAndWeights(Map<Double, Double> dataSet)
+    {
+        System.out.println("\nProvided numbers and generated weights: ");
+
+        for (Map.Entry<Double, Double> entry: dataSet.entrySet())
+        {
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        }
     }
 
     private static Double getWeightedAverageFrom(Map<Double, Double> dataSet)
@@ -80,10 +83,5 @@ public class WeightedAverage
         result = counter / denominator;
 
         return result;
-    }
-
-    private static Double getRandomWeightFromRange(Integer min, Integer max)
-    {
-        return ThreadLocalRandom.current().nextDouble(min, max);
     }
 }
